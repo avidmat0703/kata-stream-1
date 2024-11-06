@@ -1,20 +1,15 @@
-
 package org.iesvdm.kata1;
 
-
 import org.junit.jupiter.api.BeforeEach;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class PetDomainForKata
-{
+public abstract class PetDomainForKata {
     protected List<Person> people;
 
     @BeforeEach
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         this.people = Arrays.asList(
                 new Person("Mary", "Smith").addPet(PetType.CAT, "Tabby", 2),
                 new Person("Bob", "Smith")
@@ -31,8 +26,12 @@ public abstract class PetDomainForKata
         );
     }
 
-    public Optional<Person> getPersonNamed(String fullName)
-    {
-        return Optional.empty(); //TODO
+    public Optional<Person> getPersonNamed(String fullName) {
+//        Optional<Person> optionalPerson = this.people.stream()
+//                .filter(person1 -> person1.getFullName().equals(fullName))
+//                .findFirst();
+        return this.people.stream()
+                .filter(person1 -> person1.getFullName().equals(fullName))
+                .findFirst();
     }
 }

@@ -7,25 +7,27 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.*;
 
-public class Exercise3Test extends PetDomainForKata
-{
+
+public class Exercise3Test extends PetDomainForKata {
     @Test
     @Tag("KATA")
-    public void getCountsByPetEmojis()
-    {
+    public void getCountsByPetEmojis() {
         //TODO
         // Obtain petTypes from people
-        List<PetType> petTypes = new ArrayList<>();
+        List<PetType> petTypes = people.stream()
+                .map(Person::getPets)
+                .flatMap(Collection::stream)
+                .map(Pet::getType)
+                .toList();
 
         // Do you recognize this pattern? Can you simplify it using Java Streams?
         Map<String, Long> petEmojiCounts = new HashMap<>();
-        for (PetType petType : petTypes)
-        {
+        for (PetType petType : petTypes) {
             String petEmoji = petType.toString();
             Long count = petEmojiCounts.get(petEmoji);
-            if (count == null)
-            {
+            if (count == null) {
                 count = 0L;
             }
             petEmojiCounts.put(petEmoji, count + 1L);
@@ -36,24 +38,21 @@ public class Exercise3Test extends PetDomainForKata
 
         //TODO
         // Replace by a stream the previous pattern
-        Map<String, Long> petEmojiCounts2 = new HashMap<>();
+        Map<String, Long> petEmojiCounts2 = petTypes.stream().collect(groupingBy(PetType::toString, counting()));
         Assertions.assertEquals(expectedMap, petEmojiCounts2);
 
     }
 
     @Test
     @Tag("KATA")
-    public void getPeopleByLastName()
-    {
+    public void getPeopleByLastName() {
 
         // Do you recognize this pattern?
         Map<String, List<Person>> lastNamesToPeople = new HashMap<>();
-        for (Person person : this.people)
-        {
+        for (Person person : this.people) {
             String lastName = person.getLastName();
             List<Person> peopleWithLastName = lastNamesToPeople.get(lastName);
-            if (peopleWithLastName == null)
-            {
+            if (peopleWithLastName == null) {
                 peopleWithLastName = new ArrayList<>();
                 lastNamesToPeople.put(lastName, peopleWithLastName);
             }
@@ -64,25 +63,22 @@ public class Exercise3Test extends PetDomainForKata
 
         //TODO
         // Replace by stream the previous pattern
-        Map<String, List<Person>> lastNamesToPeople2 = new HashMap<>();
+        Map<String, List<Person>> lastNamesToPeople2 = this.people.stream()
+                .collect(groupingBy(Person::getLastName));
         Assertions.assertEquals(3, lastNamesToPeople2.get("Smith").size());
     }
 
     @Test
     @Tag("KATA")
-    public void getPeopleByTheirPetTypes()
-    {
+    public void getPeopleByTheirPetTypes() {
         Map<PetType, Set<Person>> peopleByPetType = new HashMap<>();
         // Do you recognize this pattern? Is there a matching pattern for this in Java Streams?
-        for (Person person : this.people)
-        {
+        for (Person person : this.people) {
             List<Pet> pets = person.getPets();
-            for (Pet pet : pets)
-            {
+            for (Pet pet : pets) {
                 PetType petType = pet.getType();
                 Set<Person> peopleWithPetType = peopleByPetType.get(petType);
-                if (peopleWithPetType == null)
-                {
+                if (peopleWithPetType == null) {
                     peopleWithPetType = new HashSet<>();
                     peopleByPetType.put(petType, peopleWithPetType);
                 }
@@ -99,7 +95,9 @@ public class Exercise3Test extends PetDomainForKata
 
         //TODO
         // Replace by stream
-        Map<PetType, Set<Person>> peopleByPetType2 = new HashMap<>();
+        Map<PetType, Set<Person>> peopleByPetType2 = this.people.stream()
+                .flatMap(p -> p.getPets().stream().map(pet -> new Object[]{p, pet}))
+                .collect(groupingBy(ao -> ((Pet) ao[1]).getType(), mapping(ao -> ((Person) ao[0]), toSet())));
 
         Assertions.assertEquals(2, peopleByPetType2.get(PetType.CAT).size());
         Assertions.assertEquals(2, peopleByPetType2.get(PetType.DOG).size());
@@ -111,11 +109,12 @@ public class Exercise3Test extends PetDomainForKata
 
     @Test
     @Tag("KATA")
-    public void getPeopleByTheirPetEmojis()
-    {
+    public void getPeopleByTheirPetEmojis() {
         //TODO
         // Replace by stream
-        Map<String, Set<Person>> petTypesToPeople = new HashMap<>();
+        Map<String, Set<Person>> petTypesToPeople = this.people.stream()
+                .flatMap(p -> p.getPets().stream().map(pet -> new Object[]{p, pet}))
+                .collect(groupingBy(ao -> ((Pet) ao[1]).getType().toString(), mapping(ao -> ((Person) ao[0]), toSet())));
 
         Assertions.assertEquals(2, petTypesToPeople.get("🐱").size());
         Assertions.assertEquals(2, petTypesToPeople.get("🐶").size());
