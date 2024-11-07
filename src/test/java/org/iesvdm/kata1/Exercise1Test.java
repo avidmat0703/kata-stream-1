@@ -37,7 +37,7 @@ public class Exercise1Test extends PetDomainForKata {
                     .toList();
         }
 
-        Assertions.assertEquals("Tabby", names.get(0)); //TODO
+        Assertions.assertEquals("Tabby", names.getFirst()); //TODO
     }
 
     @Test
