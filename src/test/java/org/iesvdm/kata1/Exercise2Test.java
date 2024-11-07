@@ -40,7 +40,8 @@ public class Exercise2Test extends PetDomainForKata {
     public void howManyPeopleHaveCats() {
         //TODO
         // replace with a method call send to this.people that checks how many people have cats
-        int count = (int) people.stream().filter(person -> person.hasPet(PetType.CAT)).count();
+        int count = (int) people.stream()
+                .filter(person -> person.hasPet(PetType.CAT)).count();
         System.out.println(count);
 
         Assertions.assertEquals(2, count);
@@ -51,8 +52,9 @@ public class Exercise2Test extends PetDomainForKata {
     public void findMarySmith() {
         //TODO
         // replace with a stream on people to obtain Mary Smith
-        Person result = people.stream().filter(person -> person.getFirstName().equals("Mary"))
-                .filter(person -> person.getLastName().equals("Smith")).findFirst().get();
+        Person result = people.stream()
+                .filter(person -> person.getFirstName().equals("Mary"))
+                .filter(person -> person.getLastName().equals("Smith")).findFirst().orElse(null);
 
         Assertions.assertEquals("Mary", result.getFirstName());
         Assertions.assertEquals("Smith", result.getLastName());
