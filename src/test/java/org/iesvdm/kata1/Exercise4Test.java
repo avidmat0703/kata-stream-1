@@ -17,7 +17,7 @@ public class Exercise4Test extends PetDomainForKata {
 
         //TODO
         // Replace by stream of petAges
-        var petAges = this.people.stream()
+        var petAges = people.stream()
                 .map(Person::getPets)
                 .flatMap(Collection::stream)
                 .map(Pet::getAge)
@@ -63,7 +63,7 @@ public class Exercise4Test extends PetDomainForKata {
 
         //TODO
         // find Bob Smith
-        Person person = this.people.stream()
+        Person person = people.stream()
                 .filter(person1 -> person1.getFullName().equals("Bob Smith"))
                 .findAny()
                 .orElse(new Person("una", "persona"));
@@ -84,7 +84,7 @@ public class Exercise4Test extends PetDomainForKata {
 
         //TODO
         // Unmodificable map of counts
-        Map<String, Long> countsByEmoji = this.people.stream()
+        Map<String, Long> countsByEmoji = people.stream()
                 .flatMap(person -> person.getPets().stream())
                 .collect(groupingBy(pet -> pet.getType().toString(), counting()));
 
@@ -105,7 +105,7 @@ public class Exercise4Test extends PetDomainForKata {
 
         //TODO
         // Obtain three top pets
-        var favorites = this.people.stream()
+        var favorites = people.stream()
                 .flatMap(person -> person.getPets().stream())
                 .collect(groupingBy(Pet::getType, counting()))
                 .entrySet().stream()
@@ -129,7 +129,7 @@ public class Exercise4Test extends PetDomainForKata {
 
         //TODO
         // Obtain pet ages
-        var petAges = this.people.stream()
+        var petAges = people.stream()
                 .map(Person::getPets)
                 .flatMap(Collection::stream)
                 .map(Pet::getAge)

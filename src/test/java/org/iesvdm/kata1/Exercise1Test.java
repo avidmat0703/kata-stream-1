@@ -15,7 +15,7 @@ public class Exercise1Test extends PetDomainForKata {
     public void getFirstNamesOfAllPeople() {
         //TODO
         // Replace empty list firstNames with a stream transformation on people.
-        List<String> firstNames = this.people.stream()
+        List<String> firstNames = people.stream()
                 .map(Person::getFirstName)
                 .toList();
 
@@ -46,7 +46,9 @@ public class Exercise1Test extends PetDomainForKata {
     public void getPeopleWithCats() {
         //TODO
         // Replace empty list with a positive filtering stream on people
-        List<String> peopleWithCats = this.people.stream().filter(person -> person.hasPet(PetType.CAT)).map(Person::getLastName).toList();
+        List<String> peopleWithCats = people.stream()
+                .filter(person -> person.hasPet(PetType.CAT))
+                .map(Person::getLastName).toList();
 
         var expectedFirstNames = Arrays.asList("Smith", "Smith");
         Assertions.assertEquals(expectedFirstNames, peopleWithCats);
@@ -58,8 +60,9 @@ public class Exercise1Test extends PetDomainForKata {
     public void getPeopleWithoutCats() {
         //TODO
         // Replace empty list with a negative filtering stream on people
-        List<String> peopleWithoutCats = this.people.stream()
-                .filter(person -> !person.hasPet(PetType.CAT)).map(Person::getLastName).toList();
+        List<String> peopleWithoutCats = people.stream()
+                .filter(person -> !person.hasPet(PetType.CAT))
+                .map(Person::getLastName).toList();
 
 
         var expectedFirstNames = Arrays.asList("Smith", "Snake", "Bird", "Turtle", "Hamster", "Doe");

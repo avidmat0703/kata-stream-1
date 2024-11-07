@@ -18,8 +18,8 @@ public class Exercise5Test extends PetDomainForKata {
     public void partitionPetAndNonPetPeople() {
         //TODO
         // Obtain a partition over people with or without pets
-        List<Person> partitionListPetPeople = this.people.stream().filter(Person::isPetPerson).toList();
-        List<Person> partitionListNotPetPeople = this.people.stream().filter(person -> !person.isPetPerson()).toList();
+        List<Person> partitionListPetPeople = people.stream().filter(Person::isPetPerson).toList();
+        List<Person> partitionListNotPetPeople = people.stream().filter(person -> !person.isPetPerson()).toList();
 
         Assertions.assertEquals(7, partitionListPetPeople.size());
         Assertions.assertEquals(1, partitionListNotPetPeople.size());
@@ -31,10 +31,9 @@ public class Exercise5Test extends PetDomainForKata {
     public void getOldestPet() {
         //TODO
         // obtain the oldest pet
-        Pet oldestPet = this.people.stream()
+        Pet oldestPet = people.stream()
                 .map(Person::getPets)
                 .flatMap(Collection::stream)
-                // .max((o1, o2) -> o1.getAge() - o2.getAge())
                 .max(Comparator.comparingInt(Pet::getAge))
                 .orElse(new Pet(PetType.HAMSTER, "", 0));
         Assertions.assertEquals(PetType.DOG, oldestPet.getType());
@@ -46,7 +45,7 @@ public class Exercise5Test extends PetDomainForKata {
     public void getAveragePetAge() {
         //TODO
         // obtain the average age of the pets
-        double averagePetAge = this.people.stream()
+        double averagePetAge = people.stream()
                 .map(Person::getPets)
                 .flatMap(Collection::stream)
                 .map(Pet::getAge).collect(averagingInt(Integer::intValue));
@@ -59,7 +58,7 @@ public class Exercise5Test extends PetDomainForKata {
         //TODO
         // obtain the set of pet ages
         Set<Integer> petAges = new java.util.HashSet<>(Set.of(5));
-        Set<Integer> morePetAges = this.people.stream()
+        Set<Integer> morePetAges = people.stream()
                 .map(Person::getPets)
                 .flatMap(Collection::stream)
                 .map(Pet::getAge)
@@ -76,7 +75,10 @@ public class Exercise5Test extends PetDomainForKata {
     public void findOwnerWithMoreThanOnePetOfTheSameType() {
         //TODO
         // obtain owner with more than one pet of the same type
-        Person petOwner = this.people.stream().filter(person -> person.getPets().size() != person.getPets().stream().map(Pet::getType).distinct().toList().size()) // si el tamaño es distinto al hacer el distinct es que los animales son iguales
+        Person petOwner = people.stream()
+                .filter(person -> person.getPets().size() != person.getPets().stream()
+                        .map(Pet::getType).distinct()
+                        .toList().size())
                 .findFirst()
                 .orElse(new Person("", ""));
 
@@ -84,6 +86,7 @@ public class Exercise5Test extends PetDomainForKata {
 
         //TODO
         // obtain the concatenation of the pet emojis of the owner
-        Assertions.assertEquals("🐹 🐹", petOwner.getPets().stream().map(Pet::toString).collect(joining(" ")));
+        Assertions.assertEquals("🐹 🐹", petOwner.getPets().stream()
+                .map(Pet::toString).collect(joining(" ")));
     }
 }

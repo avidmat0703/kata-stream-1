@@ -1,12 +1,9 @@
 package org.iesvdm.kata1;
 
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
 import java.util.*;
-
 import static java.util.stream.Collectors.*;
 
 
@@ -49,7 +46,7 @@ public class Exercise3Test extends PetDomainForKata {
 
         // Do you recognize this pattern?
         Map<String, List<Person>> lastNamesToPeople = new HashMap<>();
-        for (Person person : this.people) {
+        for (Person person : people) {
             String lastName = person.getLastName();
             List<Person> peopleWithLastName = lastNamesToPeople.get(lastName);
             if (peopleWithLastName == null) {
@@ -63,7 +60,7 @@ public class Exercise3Test extends PetDomainForKata {
 
         //TODO
         // Replace by stream the previous pattern
-        Map<String, List<Person>> lastNamesToPeople2 = this.people.stream()
+        Map<String, List<Person>> lastNamesToPeople2 = people.stream()
                 .collect(groupingBy(Person::getLastName));
         Assertions.assertEquals(3, lastNamesToPeople2.get("Smith").size());
     }
@@ -73,7 +70,7 @@ public class Exercise3Test extends PetDomainForKata {
     public void getPeopleByTheirPetTypes() {
         Map<PetType, Set<Person>> peopleByPetType = new HashMap<>();
         // Do you recognize this pattern? Is there a matching pattern for this in Java Streams?
-        for (Person person : this.people) {
+        for (Person person : people) {
             List<Pet> pets = person.getPets();
             for (Pet pet : pets) {
                 PetType petType = pet.getType();
@@ -95,7 +92,7 @@ public class Exercise3Test extends PetDomainForKata {
 
         //TODO
         // Replace by stream
-        Map<PetType, Set<Person>> peopleByPetType2 = this.people.stream()
+        Map<PetType, Set<Person>> peopleByPetType2 = people.stream()
                 .flatMap(p -> p.getPets().stream().map(pet -> new Object[]{p, pet}))
                 .collect(groupingBy(ao -> ((Pet) ao[1]).getType(), mapping(ao -> ((Person) ao[0]), toSet())));
 
@@ -112,7 +109,7 @@ public class Exercise3Test extends PetDomainForKata {
     public void getPeopleByTheirPetEmojis() {
         //TODO
         // Replace by stream
-        Map<String, Set<Person>> petTypesToPeople = this.people.stream()
+        Map<String, Set<Person>> petTypesToPeople = people.stream()
                 .flatMap(p -> p.getPets().stream().map(pet -> new Object[]{p, pet}))
                 .collect(groupingBy(ao -> ((Pet) ao[1]).getType().toString(), mapping(ao -> ((Person) ao[0]), toSet())));
 
